@@ -1,1 +1,3 @@
-Absolutely! Using both the RTX 4060 and RTX 3050 can help you maximize your gaming and viewing performance! The RTX 4060 will handle the heavy gaming loads, allowing for smoother frame rates and better graphics on one monitor. Meanwhile, the RTX 3050 can take care of background tasks or a second display for streaming, browsing, or even watching videos, which can free up resources on the main card. Just make sure your game's settings are optimized to utilize the 4060!
+Hey Travis! Sure thing! A breadboard is a tool for building electronic circuits without soldering. It has rows and columns of holes for inserting components like resistors, capacitors, and chips. The holes are interconnected horizontally and vertically, allowing electricity to flow. 
+
+You plug in components and connect them using jumper wires. It’s great for prototyping! Just push the components into the holes and connect them as needed. Easy-peasy! Let me know if you want to dive deeper into any part!
