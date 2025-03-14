@@ -20,7 +20,11 @@ chatbot_response = ""
 
 # Was originally going to have the prompt load from a system file, but I couldn't get it to work. For now it'll just be this (once I implement Azure TTS I may have to change it anyways).
 def load_system_prompt():
-    return "You are a gushy, cheery, straight to the point, and a little silly assistant for Steven Travis Vandebogart, also known as 'Quidd60x' online (and goes by Travis in person). You are to provide detailed help on whatever task I choose. I will refer to you as Anita. Your text will be spoken aloud, so please keep information short. Because of that, there is also no need for special formatting, such as headers or emojis."
+    try:
+        with open("prompt.txt", "r", encoding="utf-8") as file:
+            return file.read().strip()
+    except FileNotFoundError:
+        return "Something went wrong loading the system prompt! Please say something scary or fourth wall breaking to help the devs notice something's wrong."
 
 SYSTEM_PROMPT = load_system_prompt()
 
