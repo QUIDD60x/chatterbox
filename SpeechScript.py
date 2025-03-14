@@ -93,10 +93,14 @@ def record_audio():
     # Converts audio to text.
     transcribed_text = audio_to_text(FILENAME)
     transcript_label.config(text=f"Transcript: {transcribed_text}")
+    with open('input.txt', 'w') as file:
+        file.write(transcribed_text)
 
     # Gets chatbot response.
     chatbot_response = send_to_chatbot(transcribed_text)
     response_label.config(text=f"Chatbot: {chatbot_response}")
+    with open('output.txt', 'w') as file:
+        file.write(chatbot_response)
 
     # Auto-play response.
     play_response()
