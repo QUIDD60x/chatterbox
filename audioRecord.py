@@ -18,6 +18,11 @@ recording = False
 audio_data = []
 chatbot_response = ""
 
+# NOTICE: THIS WILL NOT WORK WITHOUT AN OPENAI API KEY!! You WILL need to pay for one (unless you've just got one on hand). to add it, you can simply add:
+# api_key = "apiKeyHere". HOWEVER, I set mine to be an enviromental variable, by doing:
+# setx OPENAI_API_KEY "your_api_key_here". For more information, click here -> https://platform.openai.com/docs/libraries#create-and-export-an-api-key
+
+
 # Was originally going to have the prompt load from a system file, but I couldn't get it to work. For now it'll just be this (once I implement Azure TTS I may have to change it anyways).
 def load_system_prompt():
     try:
