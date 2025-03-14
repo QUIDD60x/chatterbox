@@ -11,7 +11,7 @@ import io
 # Audio settings
 SAMPLE_RATE = 44100 # CD quality HZ, best bang for your buck.
 CHANNELS = 1 # no need for stereo realistically, 1 is mono.
-FILENAME = "recorded_audio.wav" # Should be obvious.
+FILENAME = "recorded_audio.wav" # Saves a copy of your recording to your device (mostly for debugging purposes).
 
 # Global variables
 recording = False
