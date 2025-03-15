@@ -7,6 +7,9 @@ import wave
 import keyboard # I like having the control+r keybind for easy access, so I'm keeping this around.
 import openai
 import pyttsx3 # Temporary TTS module until I get myself an Azure TTS custom AI.
+import requests
+from datetime import datetime
+import pytz
 
 # Audio settings
 SAMPLE_RATE = 44100 # CD quality HZ, best bang for your buck.
@@ -17,10 +20,13 @@ FILENAME = "recorded_audio.wav"                                 # ***----- PYTTS
 recording = False
 audio_data = []
 chatbot_response = ""
+user_timezone = "America/Los_Angeles" # Change this to your own timezone for custom time responses.
 
 # NOTICE: THIS WILL NOT WORK WITHOUT AN OPENAI API KEY!! You WILL need to pay for one (unless you've just got one on hand). to add it, you can simply add:
 # api_key = "apiKeyHere". HOWEVER, I set mine to be an enviromental variable, by doing:
-# setx OPENAI_API_KEY "your_api_key_here". For more information, click here -> https://platform.openai.com/docs/libraries#create-and-export-an-api-key
+# setx OPENAI_API_KEY "your_api_key_here". For more information, click here -> https://platform.openai.com/docs/libraries#create-and-export-an-api-key                                                                                                                                                                                          haha setx is like sex
+
+openWeatherMapAPIKey = "none" # UPCOMING FEATURE: You can put your Open Weather API key here to have accurate results of your local forecast!
 
 
 # Load system prompt (got it to work!)
@@ -97,11 +103,42 @@ def audio_to_text(filename):
         response = openai.Audio.transcribe(model="whisper-1", file=audio_file, language="en")
     return response["text"]
 
+# ***--- Specific Checks ---*** #
+
+def check_user_request(user_input):
+    user_input = user_input.lower().strip()  # Strip spaces to avoid blank input issues
+
+    if "time" in user_input: # This checks for your time
+        timezone = user_timezone
+        return get_time(timezone)
+    
+    return None
+
+# I plan on putting in specific voice checks here (such as asking for the weather, time, etc).
+def get_time(timezone=user_timezone):
+    try:
+        tz = pytz.timezone(timezone)
+        current_time = datetime.now(tz).strftime("%I:%M %p")  # 12-hour format with AM/PM
+        return f"The current time in {timezone} is {current_time}."
+    except Exception as e:
+        return "I couldn't determine the time."
+
 # Where all the magic happens.
 def send_to_chatbot(user_input):
+    user_input = user_input.strip()  # Remove accidental spaces/newlines
+
+    if not user_input:  
+        return "I didn't catch that. Can you say it again?"  # Prevents blank input
+
+    special_response = check_user_request(user_input)
+    if special_response:
+        return special_response  # Returns time instead of sending to the AI
+    
+    print(f"User Input: '{user_input}'")  # Debugging line to check input
+
     try:
         completion = openai.ChatCompletion.create(
-            model="gpt-4o-mini", # I use 4o mini for price to performance, feel free to change this though (although model formats can vary).
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": user_input},
