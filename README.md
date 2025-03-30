@@ -15,7 +15,7 @@ This program is best suited for those who find themselves asking for little bits
 ***
 ## Quickstart
 
-### Dependencies (for the non-azure TTS model):
+### Dependencies:
 
 * tkinter
 * numpy
@@ -34,3 +34,5 @@ Firstly You'll need your own ChatGPT and Azure API key. I explain it a bit more 
 After that, simply install all dependencies and run it in your command line interface. You'll get a text box asking for your prompt, and the AI output. I hope you enjoy!
 
 For any more help check the wiki, or leave me a message on discord (quidd60x).
+
+(this was originally made with pyttsx, but I changed it to Azure due to its much better speech abilities. You may see references to pyttsx or code referencing it, it just means I forgot to remove it.)
