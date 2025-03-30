@@ -1,3 +1,4 @@
+import os
 import tkinter as tk # I mainly use TKinter for the GUI, but it's got some other nice uses.
 from tkinter import *
 import threading # Working with threading to help balance it all out, I hope it actually makes some kind of improvement.
@@ -6,10 +7,12 @@ import numpy as np
 import wave
 import keyboard # I like having the control+r keybind for easy access, so I'm keeping this around.
 import openai
-import pyttsx3 # Temporary TTS module until I get myself an Azure TTS custom AI.
 import requests
 from datetime import datetime
 import pytz
+import azure.cognitiveservices.speech as speechsdk # The Azure speech service.
+import simpleaudio as sa
+
 
 # Audio settings
 SAMPLE_RATE = 44100 # CD quality HZ, best bang for your buck.
@@ -22,11 +25,22 @@ audio_data = []
 chatbot_response = ""
 user_timezone = "America/Los_Angeles" # Change this to your own timezone for custom time responses.
 
-# NOTICE: THIS WILL NOT WORK WITHOUT AN OPENAI API KEY!! You WILL need to pay for one (unless you've just got one on hand). to add it, you can simply add:
-# api_key = "apiKeyHere". HOWEVER, I set mine to be an enviromental variable, by doing:
+# NOTICE: THIS WILL NOT WORK WITHOUT AN OPENAI & AZURE API KEY!! You WILL need to pay for them. to add it, you can simply add:
+# --- for openAI:
+# api_key = "apiKeyHere"
+# --- for azure:
+# AZURE_SPEECH_KEY = "APIKEYHERE"
+# HOWEVER, I set mine to be an enviromental variable in my command prompt by doing:
+# setx AZURE_SPEECH_KEY "your_azure_api_key_here"
 # setx OPENAI_API_KEY "your_api_key_here". For more information, click here -> https://platform.openai.com/docs/libraries#create-and-export-an-api-key                                                                                                                                                                                          haha setx is like sex
 
+
 openWeatherMapAPIKey = "none" # UPCOMING FEATURE: You can put your Open Weather API key here to have accurate results of your local forecast!
+
+AZURE_SPEECH_KEY = os.getenv("AZURE_SPEECH_KEY") # Like I stated previously I have mine saved in my enviroment, so I call them like this.
+AZURE_REGION = os.getenv("AZURE_REGION")
+if not AZURE_SPEECH_KEY or not AZURE_REGION:
+    raise ValueError("Azure API key or region is missing. Set them as environment variables.") # I don't have to declare openAIs API key at all because it just grabs it from the system
 
 
 # Load system prompt (got it to work!)
@@ -39,17 +53,32 @@ def load_system_prompt():
 
 SYSTEM_PROMPT = load_system_prompt()
 
-# Text-to-speech engine initilization and the customizations to make it more my taste (getting Azure TTS soon).
-engine = pyttsx3.init()
-engine.setProperty('rate', 200)
-voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[1].id)
+def azure_text_to_speech(text, output_file="output.wav"): # This has gone through a couple changes while I've worked on it, but currently I like this best. This will take the response and store it in a high quality audio file, and play that. Previous renditions sounded very grainy (like you were on the phone), but this sounds perfect.
+    speech_config = speechsdk.SpeechConfig(subscription=AZURE_SPEECH_KEY, region=AZURE_REGION)
+    speech_config.speech_synthesis_voice_name = "en-US-AriaNeural" # Change this voice to whatever you'd like.
+    speech_config.set_speech_synthesis_output_format(
+        speechsdk.SpeechSynthesisOutputFormat.Riff48Khz16BitMonoPcm
+    )
+
+    file_config = speechsdk.audio.AudioOutputConfig(filename=output_file)
+    speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=file_config)
+
+    result = speech_synthesizer.speak_text_async(text).get()
+    if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
+        print("Speech saved successfully!")
+    elif result.reason == speechsdk.ResultReason.Canceled:
+        print(f"Error: {result.cancellation_details.reason}")
+
+    # Plays the high-quality audio file.
+    wave_obj = sa.WaveObject.from_wave_file(output_file)
+    wave_obj.play().wait_done()
+
+
 
 # Plays the chatbot response verbally.
 def play_response():
     if chatbot_response:
-        engine.say(chatbot_response)
-        engine.runAndWait()
+        azure_text_to_speech(chatbot_response)
 
 # Recording callback function
 def callback(indata, frames, time, status):
