@@ -1,1 +1,1 @@
-How do people use a mental abacus?
+Hey Anita, what's the difference between an Arduino and an ESP32?

@@ -55,7 +55,7 @@ SYSTEM_PROMPT = load_system_prompt()
 
 def azure_text_to_speech(text, output_file="output.wav"): # This has gone through a couple changes while I've worked on it, but currently I like this best. This will take the response and store it in a high quality audio file, and play that. Previous renditions sounded very grainy (like you were on the phone), but this sounds perfect.
     speech_config = speechsdk.SpeechConfig(subscription=AZURE_SPEECH_KEY, region=AZURE_REGION)
-    speech_config.speech_synthesis_voice_name = "en-US-AriaNeural" # Change this voice to whatever you'd like.
+    speech_config.speech_synthesis_voice_name = "en-US-CoraNeural" # Change this voice to whatever you'd like.
     speech_config.set_speech_synthesis_output_format(
         speechsdk.SpeechSynthesisOutputFormat.Riff48Khz16BitMonoPcm
     )

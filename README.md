@@ -1,5 +1,5 @@
-# Speech to Speech - Built in TTS version
-## A program already built into chatGPT, using chatGPT.
+# Chatterbox 2 - Your helpful desktop AI.
+## Highly configurable, super helpful.
 ---
 ## How it works/Why I made this
 This program essentially allows you to "speak" with a chatbot, and allows them to speak back. The system works as follows:
@@ -7,7 +7,7 @@ This program essentially allows you to "speak" with a chatbot, and allows them t
 1. You speak into your microphone while recording (which will save the recording as a .wav).
 2. OpenAIs Whisper translates that recording into text.
 3. That translation is sent to your AI API (you will need your own).
-4. The response is collected, then spoken out loud (using Python's free PYTTSX3).
+4. The response is collected, then spoken out loud (using Azure's speech API, which you'll also need a subscription for).
 
 And for convenience, the text input + output is collected in a local text file, and the recording is saved (until rewritten by the next input).
 
@@ -23,9 +23,9 @@ This program is best suited for those who find themselves asking for little bits
 * speechrecognition
 * sounddevice
 * keyboard
-* pyttsx3
+* azure.cognitiveservices.speech
 
-You can paste `pip install openai speechrecognition sounddevice numpy keyboard pyttsx3 tkinter` to install all of these immediately.
+You can paste `pip install openai speechrecognition sounddevice numpy keyboard tkinter azure-cognitiveservices-speech` to install all of these immediately.
 
 ### How to use:
 
