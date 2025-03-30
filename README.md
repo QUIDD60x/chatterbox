@@ -29,8 +29,8 @@ You can paste `pip install openai speechrecognition sounddevice numpy keyboard t
 
 ### How to use:
 
-Firstly You'll need your own ChatGPT API key. I explain it a bit more in the script, but you can either add it as an enviromental variable or specify it in the marked variable.
+Firstly You'll need your own ChatGPT and Azure API key. I explain it a bit more in the script, but you can either add it as an enviromental variable or specify it in the marked variable.
 
-After that, simply install all dependencies and run it in your command line interface.
+After that, simply install all dependencies and run it in your command line interface. You'll get a text box asking for your prompt, and the AI output. I hope you enjoy!
 
 For any more help check the wiki, or leave me a message on discord (quidd60x).
